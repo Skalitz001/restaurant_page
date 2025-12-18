@@ -1,38 +1,57 @@
-import './style.css'; // Assuming you have css-loader set up in Webpack
+import './style.css'; 
 import loadHome from './home';
 import loadMenu from './menu';
 import loadContact from './contact';
 
-// 1. Initial Load
-// TODO: Call loadHome() here so the page isn't empty on first visit.
+console.log("Index.js has loaded!");
 
-
-// 2. Tab Switching Logic
 function clearContent() {
     const contentDiv = document.getElementById('content');
-    // TODO: Set contentDiv.innerHTML to an empty string to wipe current tab
+    contentDiv.innerHTML = "";
 }
 
-// 3. Event Listeners
+// Helper function to switch the 'active' class
+function setActiveButton(button) {
+    const buttons = document.querySelectorAll('.nav-btn');
+    
+    // 1. Remove 'active' from ALL buttons
+    buttons.forEach((btn) => {
+        if (btn !== button) {
+            btn.classList.remove('active');
+        }
+    });
+
+    // 2. Add 'active' to the clicked button
+    button.classList.add('active');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const homeBtn = document.getElementById('home-btn');
     const menuBtn = document.getElementById('menu-btn');
     const contactBtn = document.getElementById('contact-btn');
 
+    // Safe initial load
+    loadHome();
+    setActiveButton(homeBtn); // Ensure Home button looks active on start
+
     homeBtn.addEventListener('click', () => {
+        if (homeBtn.classList.contains('active')) return; // Optimization: Don't reload if already active
         clearContent();
         loadHome();
-        // Optional: Toggle the 'active' class on buttons for styling
+        setActiveButton(homeBtn);
     });
 
     menuBtn.addEventListener('click', () => {
+        if (menuBtn.classList.contains('active')) return;
         clearContent();
         loadMenu();
-        // Optional: Toggle the 'active' class on buttons
+        setActiveButton(menuBtn);
     });
 
     contactBtn.addEventListener('click', () => {
-        // TODO: Call clearContent
-        // TODO: Call loadContact
+        if (contactBtn.classList.contains('active')) return;
+        clearContent();
+        loadContact();
+        setActiveButton(contactBtn);
     });
 });
